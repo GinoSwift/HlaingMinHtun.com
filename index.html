@@ -569,28 +569,26 @@
         </div>
       </div>
 
-      <form action="forms/contact.php" method="post" role="form" class="php-email-form mt-4">
+      <form id="contact-form" onsubmit="sendEmail(event)">
         <div class="row">
-          <div class="col-md-6 form-group">
-            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-          </div>
-          <div class="col-md-6 form-group mt-3 mt-md-0">
-            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-          </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="name" class="form-control" placeholder="Your Name" required>
+            </div>
+            <div class="col-md-6 form-group mt-md-0">
+                <input type="email" id="email" class="form-control" placeholder="Your Email" required>
+            </div>
         </div>
         <div class="form-group mt-3">
-          <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+            <input type="text" id="subject" class="form-control" placeholder="Subject" required>
         </div>
         <div class="form-group mt-3">
-          <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+            <textarea id="message" class="form-control" rows="5" placeholder="Message" required></textarea>
         </div>
-        <div class="my-3">
-          <div class="loading">Loading</div>
-          <div class="error-message"></div>
-          <div class="sent-message">Your message has been sent. Thank you!</div>
+        <div class="text-center">
+            <button type="submit">Send Message</button>
         </div>
-        <div class="text-center"><button type="submit">Send Message</button></div>
-      </form>
+    </form>
+    
 
     </div>
   </section><!-- End Contact Section -->
@@ -608,6 +606,38 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+    (function(){
+        emailjs.init("Q9JGMBaGzw38UOxzi");
+    })();
+
+    function sendEmail(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Get form values
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var subject = document.getElementById('subject').value;
+        var message = document.getElementById('message').value;
+
+        // Send email using Email.js
+        emailjs.send("service_58rcxjr", "template_ukdawl3", {
+            from_name: name,
+            reply_to: email,
+            subject: subject,
+            message_html: message
+        }).then(function(response) {
+            console.log('Email sent:', response);
+            alert('Your message has been sent. Thank you!');
+            // Clear the form fields
+            document.getElementById('contact-form').reset();
+        }, function(error) {
+            console.error('Email sending failed:', error);
+            alert('Message sending failed. Please try again later.');
+        });
+    }
+</script>
 
 </body>
 
